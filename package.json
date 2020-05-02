@@ -1,0 +1,20 @@
+{
+  "name": "three.js_projects",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harsukhdeol/three.js_projects.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harsukhdeol/three.js_projects/issues"
+  },
+  "homepage": "https://github.com/harsukhdeol/three.js_projects#readme"
+}

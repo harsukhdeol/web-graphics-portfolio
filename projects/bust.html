@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bust</title>
+</head>
+
+<body>
+</body>
+<script type="module">
+    import * as THREE from "../js/three.module.js";
+    import { GLTFLoader } from "../utils/GLTFLoader.js";
+
+    var renderer, camera, scene;
+    var mesh;
+    var spotlight;
+
+    var container, loader;
+
+    var mouseX, mouseY, targetX, targetY = 0;
+
+    var winX = window.innerWidth / 2;
+    var winY = window.innerHeight / 2;
+
+    init();
+    animate();
+
+    function init() {
+        container = document.createElement('div');
+        document.body.appendChild(container);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        //renderer.outputEncoding = THREE.sRGBEncoding;
+        container.appendChild(renderer.domElement);
+
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color("hsl(250,10%,10%)");
+
+        camera = new THREE.PerspectiveCamera(27, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.set(0, 0, 1500);
+
+        const hemiLight = new THREE.HemisphereLight(0x44333);
+        scene.add(hemiLight);
+
+        spotlight = new THREE.SpotLight(0xffffbb, 2);
+        spotlight.position.set(0.5, 0, 1);
+        spotlight.position.multiplyScalar(800);
+        spotlight.castShadow = true;
+
+        /*  spotlight.shadow.mapSize.width = 2048;
+         spotlight.shadow.mapSize.height = 2048;
+ 
+         spotlight.shadow.camera.near = 200;
+         spotlight.shadow.camera.far = 1500;
+         spotlight.shadow.fov = 40;
+         spotlight.shadow.bias = -0.005;
+  */
+
+        scene.add(spotlight);
+
+        const bump = new THREE.TextureLoader().load("../textures/Infinite-Level_02_Disp_NoSmoothUV-4096.jpg");
+
+        const material = new THREE.MeshPhongMaterial({
+            color: new THREE.Color("hsl(250,40%,45%)"),
+            bumpMap: bump,
+            specular: 0x222222,
+            shininess: 25,
+            bumpScale: 12
+        });
+
+        loader = new GLTFLoader();
+        loader.load("../textures/LeePerrySmith.glb", function (gltf) {
+            createScene(gltf.scene.children[0].geometry, 100, material);
+
+        });
+
+        window.addEventListener('mousemove', onMouseMove, false);
+        window.addEventListener('resize', onWindowResize);
+
+    }
+    function createScene(geometry, scale, material) {
+        mesh = new THREE.Mesh(geometry, material);
+
+        mesh.position.y = -50;
+
+        mesh.scale.set(scale, scale, scale);
+
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+
+        scene.add(mesh);
+    }
+
+    function onWindowResize() {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    }
+
+    function onMouseMove(e) {
+        mouseX = (e.clientX - winX);
+        mouseY = (e.clientY - winY);
+    }
+    function animate() {
+        requestAnimationFrame(animate);
+        render();
+    }
+    function render() {
+        targetX = mouseX * 0.001;
+        targetY = mouseY * 0.001;
+        console.log(targetX, targetY);
+        if (mesh && targetX && targetY) {
+
+            mesh.rotation.y += 0.05 * (targetX - mesh.rotation.y);
+            mesh.rotation.x += 0.05 * (targetY - mesh.rotation.x);
+        }
+        renderer.render(scene, camera);
+    }
+</script>
+
+</html>

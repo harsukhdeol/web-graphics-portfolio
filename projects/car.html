@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car</title>
+</head>
+
+<body>
+
+</body>
+<script type="module">
+    import * as THREE from "../js/three.module.js";
+    import { OrbitControls } from "../utils/OrbitControls.js";
+    import { GLTFLoader } from "../utils/GLTFLoader.js";
+    import { DRACOLoader } from "../utils/DRACOLoader.js"
+    var renderer, scene, camera;
+    var car, mirror;
+    var controls;
+
+    init();
+    animate();
+    function init() {
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.body.appendChild(renderer.domElement);
+
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff);
+
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+        camera.position.set(0, 20, 10);
+
+        var dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('../utils/draco/gltf/');
+
+        var loader = new GLTFLoader();
+        loader.setDRACOLoader(dracoLoader);
+        loader.load("../textures/ferrari.glb", function (gltf) {
+            car = gltf.scene.children[0];
+            console.log(car);
+
+            var texture = new THREE.TextureLoader().load("../textures/ferrari_ao.png");
+            /*  var shadow = new THREE.Mesh(
+                 new THREE.PlaneBufferGeometry(0.644)
+             ) */
+            scene.add(car);
+        })
+        var ambLight = new THREE.AmbientLight(0xfffff);
+        scene.add(ambLight);
+
+        controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+
+        controls.screenSpacePanning = false;
+        (controls.minDistance = 1), (controls.maxDistance = 200);
+        controls.maxPolarAngle = Math.PI / 2;
+    }
+    function animate() {
+        requestAnimationFrame(animate);
+        render();
+    }
+    function render() {
+        renderer.render(scene, camera);
+    }
+</script>
+
+</html>
