@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transparent Material</title>
+</head>
+
+<body>
+
+</body>
+<script type="module">
+
+    import * as THREE from '../build/three.module.js';
+
+    import { OrbitControls } from './jsm/controls/OrbitControls.js';
+    import { RGBELoader } from './jsm/loaders/RGBELoader.js';
+
+    var params = {
+        color: 0xffffff,
+        transparency: 0.90,
+        envMapIntensity: 1,
+        lightIntensity: 1,
+        exposure: 1
+    };
+
+    var container, stats;
+    var camera, scene, renderer;
+
+    var hdrCubeRenderTarget;
+    var spotLight1, spotLight2;
+    var mesh1, mesh2;
+    var hdrEquirect = new RGBELoader()
+        .setDataType(THREE.UnsignedByteType)
+        .setPath('../textures/equirectangular/')
+        .load('royal_esplanade_1k.hdr', function (texture) {
+
+            init();
+            animate();
+
+        });
+
+</script>
+
+</html>
