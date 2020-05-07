@@ -76,15 +76,15 @@
         var material = new THREE.MeshPhysicalMaterial({
             color: params.color,
             metalness: 0,
-            roughness: 0,/* 
+            roughness: 0,
             alphaMap: texture,
-            alphaTest: 0.5, */
+            alphaTest: 0.01,
             envMap: hdrCubeRenderTarget.texture,
             envMapIntensity: params.envMapIntensity,
             depthWrite: false,
             transparency: params.transparency,
             opacity: 1,// set to 1 when material.transparency is not zero
-            transparency: true
+            transparent: true
         })
 
         var material1 = new THREE.MeshPhysicalMaterial().copy(material);
@@ -92,29 +92,40 @@
         material1b.side = THREE.BackSide;
 
         var material2 = new THREE.MeshPhysicalMaterial().copy(material);
-        material2.premultipliedAlpha = true;//multiply transparency values
-        var material2b = new THREE.MeshPhysicalMaterial().copy(material);
-        material2b.side = THREE.BackSide;
-        material2b.premultipliedAlpha = true;
+        material2.premultipliedAlpha = true;
 
-        var test = new THREE.MeshBasicMaterial({ color: 0xfff000 })
+        var material2b = new THREE.MeshPhysicalMaterial().copy(material);
+        material2b.premultipliedAlpha = true;
+        material2b.side = THREE.BackSide;
+
         mesh1 = new THREE.Mesh(geom, material1);
-        mesh1.position.x = -30;
+        mesh1.position.x = - 30.0;
         scene.add(mesh1);
 
         var mesh = new THREE.Mesh(geom, material1b);
-        mesh.renderOrder = -1;
+        mesh.renderOrder = - 1;
         mesh1.add(mesh);
-        console.log(mesh1);
 
+        mesh2 = new THREE.Mesh(geom, material2);
+        mesh2.position.x = 30.0;
+        scene.add(mesh2);
 
+        var mesh = new THREE.Mesh(geom, material2b);
+        mesh.renderOrder = - 1;
+        mesh2.add(mesh);
         spotLight1 = new THREE.SpotLight(0xffffff, params.lightIntensity);
         spotLight1.position.set(100, 200, 100);
         spotLight1.angle = Math.PI / 6;
         scene.add(spotLight1);
 
-        var controls = new OrbitControls(camera, renderer.domElement);
+        spotLight2 = new THREE.SpotLight(0xffffff, params.lightIntensity);
+        spotLight2.position.set(-100, -200, -100);
+        spotLight2.angle = Math.PI / 6;
+        scene.add(spotLight1);
 
+        var controls = new OrbitControls(camera, renderer.domElement);
+        controls.minDistance = 10;
+        controls.maxDistance = 150;
 
     }
     function generateTexture() {
@@ -122,6 +133,7 @@
         canvas.width = canvas.height = 2;
 
         var context = canvas.getContext('2d');
+        context.fillStyle = "white";
         context.fillRect(0, 1, 2, 1);
 
         return canvas;
