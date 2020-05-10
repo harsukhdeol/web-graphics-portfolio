@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gooey</title>
+</head>
+<style>
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+
+    h1 {
+        font-family: Arial, Helvetica, sans-serif;
+        position: absolute;
+        top: 50%;
+        right: 50%;
+        transform: scale(103%);
+        transition: opacity 0.5s;
+        opacity: 0;
+        font-size: 14rem;
+        /*  animation: fadeOut ease-out 2s infinite; */
+    }
+
+    h1:last-of-type {
+        /* 
+        z-index: -1000;
+        opacity: 0;
+     
+       animation-name: fadeIn */
+    }
+
+    .active {
+        transform: scale(1);
+        opacity: 1;
+        /*   animation-name: fadeIn; */
+    }
+
+    .container {
+        filter: url(#goo);
+        /* position: fixed;
+        top: 30vh;
+        right: 30vw;
+        width: 500px; */
+        /* display: flex;
+        align-items: center;
+        justify-content: center; */
+    }
+</style>
+
+<body>
+    <div class="container">
+        <h1 class="active">Tame</h1>
+        <h1>Wild</h1>
+    </div>
+    <!--Define svg filter-->
+    <svg xmlns="http://ww.w3.org/2000/svg" version='1.1'>
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+                <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+                    result="goo" />
+                <feBlend in="SourceGraphic" in2="goo" operator="atop" </filter>
+        </defs>
+
+    </svg>
+
+</body>
+<script>
+    var tame = document.querySelectorAll('h1')[0];
+    var wild = document.querySelectorAll('h1')[1];
+    var text = document.querySelectorAll('h1');
+    console.log(tame)
+    function toggle(elem) {
+        if (elem.classList.contains('active')) {
+            elem.classList.remove('active')
+        } else {
+            elem.classList.add('active')
+        }
+
+    }
+    let nestedTimer = setTimeout(function tick() {
+        console.log('tick');
+        nestedTimer = setTimeout(tick, 2000)
+    }, 2000)
+    // setTimeout(text.forEach((h) => toggle(h)));
+    let animate = setTimeout(function tick() {
+        text.forEach((h) => toggle(h));
+        animate = setTimeout(tick, 1000)
+    }, 1000)
+
+   // animate();
+</script>
+
+</html>
