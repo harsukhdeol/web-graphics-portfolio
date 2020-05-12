@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG 101</title>
+</head>
+
+<body>
+    <svg width="600" height="700" viewbox="0 0 600 450 ">
+        <filter id="myFilter">
+
+            <!---Moves source alpha shape 20 in x and y-->
+            <feOffset in="SourceAlpha" dx="20" dy="20"></feOffset>
+            <!--   simple blur-->
+            <feGaussianBlur stdDeviation="10" result="DROP"></feGaussianBlur>
+            <!--Fills color in entire svg shape-->
+            <feFlood flood-color="#D076FF" result="COLOR"></feFlood>
+
+            <!--Combines 2 shapes together- color over drop shape-->
+            <feComposite in="COLOR" in2="DROP" operator="in" result="SHADOW1"></feComposite>
+            <!--Remaps color values - use FuncA to make alpha channel lighter-->
+            <feComponentTransfer in="Shadow1" result="SHADOW">
+                <feFuncA type="table" tableValues="0 0.5"></feFuncA>
+            </feComponentTransfer>
+            <!-- layers -->
+            <feMerge>
+                <feMergeNode in="SHADOW"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+
+        </filter>
+        <image xlink: href="../vapgrid.png" width="100%" height="100%" x="0" y="0" filter="url(#myFilter)"></image>
+    </svg>
+</body>
+
+</html>
