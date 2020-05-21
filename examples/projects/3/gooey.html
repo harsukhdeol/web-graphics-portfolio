@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gooey</title>
+</head>
+<style>
+    html,
+    body {
+
+        overflow: hidden;
+        background: radial-gradient(ellipse at center, #082F2C 0%, rgb(4, 10, 17) 100%);
+    }
+
+    .container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        filter: url(#gooey);
+        justify-content: center;
+    }
+
+    .text {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    h1 {
+        font-family: 'Courier New', Courier, monospace;
+    }
+</style>
+
+<body>
+    <div class="container">
+
+
+
+        <svg width="400" height="400">
+            <filter id="gooey">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="BLUR"></feGaussianBlur>
+                <feColorMatrix in="BLUR" mode="matrix" result="GOOEY" values="
+            1 0 0 0 0
+            0 1 0 0 0 
+            0 0 1 0 0 
+            0 0 0 20 -10
+            "></feColorMatrix>
+                <!--       <feBlend in="SourceGraphic" in2="GOOEY"></feBlend>
+         -->
+            </filter>
+            <circle cx="200" cy="200" fill="#fff" r="200"></circle>
+        </svg>
+
+        <svg width="120" height="120" id="control">
+
+            <circle cx="60" cy="60" fill="#fff" " r=" 50"></circle>
+        </svg>
+    </div>
+    <div class="text">
+        <h1>Move mouse here</h1>
+    </div>
+
+
+</body>
+<script>
+    let circle = document.querySelector("#control");
+    circle.style.position = "absolute";
+    document.addEventListener('mousemove', move);
+
+    function move(e) {
+        let x = e.clientX;
+        let y = e.clientY;
+        circle.style.left = x - 60 + "px";
+        circle.style.top = y - 60 + "px";
+    }
+
+</script>
+
+</html>

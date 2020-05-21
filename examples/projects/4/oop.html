@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    let canvas, ctx;
+    function init() {
+        canvas = document.createElement('canvas');
+        document.body.appendChild(canvas);
+        ctx = canvas.getContext('2d');
+
+        function Rect(y) {
+            this.y = y
+            function draw() {
+                ctx.beginPath()
+                console.log(this.y)
+                ctx.strokeRect(50, this.y, 50, 50)
+                console.log('draw')
+            }
+            function move() {
+                this.y += 10;
+                console.log(this.y)
+                this.draw()
+            }
+            return { draw, move }
+        }
+        let rec = Rect(30);
+        rec.draw()
+        setTimeout(rec.move(), 2000)
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+
+
+</script>
+
+</html>
