@@ -1,5 +1,5 @@
 {
-  "name": "three.js_projects",
+  "name": "web-graphics-portfolio",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -7,15 +7,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harsukhdeol/three.js_projects.git"
+    "url": "git+https://github.com/harsukhdeol/web-graphics-portfolio.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/harsukhdeol/three.js_projects/issues"
+    "url": "https://github.com/harsukhdeol/web-graphics-portfolio/issues"
   },
-  "homepage": "https://github.com/harsukhdeol/three.js_projects#readme",
+  "homepage": "https://github.com/harsukhdeol/web-graphics-portfolio#readme",
   "description": "",
   "type": "module"
 }
