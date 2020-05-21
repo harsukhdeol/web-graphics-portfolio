@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CodePen - menu</title>
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        background-color: #f1f1f1;
+      }
+      .container {
+        background-color: #f1f1f1;
+        height: 350px;
+        width: 550px;
+        position: absolute;
+        margin: auto;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: -1;
+      }
+
+      .left,
+      .right,
+      .top {
+        transform-origin: 0 0;
+      }
+      .left {
+        height: 100px;
+        width: 15px;
+        background-color: #ddd;
+        transform: rotate(120deg) skewY(-30deg) scaleY(0.864);
+        position: relative;
+      }
+      .right {
+        height: 20px;
+        width: 75px;
+        background-color: #c8c8c8;
+        transform: rotate(0deg) skewY(-30deg) scaleY(0.864);
+        position: relative;
+        bottom: 100px;
+      }
+
+      .top {
+        height: 100px;
+        width: 75px;
+        background-color: white;
+        transform: rotate(240deg) skewY(-30deg) scaleY(0.864);
+        position: relative;
+        bottom: 120px;
+        color: #f80f62;
+      }
+      .shadow {
+        height: 50px;
+        width: 50px;
+        background-color: transparent;
+        transform: rotate(210deg) skewY(-30deg) scaleY(0.864);
+        position: relative;
+        top: 30px;
+        right: 30px;
+      }
+      .item1 {
+        position: relative;
+        top: 100px;
+        left: 500px;
+      }
+
+      .fa {
+        font-size: 50px;
+      }
+
+      i {
+        transform: rotate(90deg);
+        position: relative;
+        top: 25px;
+        left: 15px;
+      }
+      .menu > div {
+        height: 0;
+        width: 0;
+        transition: 0.5s;
+        cursor: pointer;
+      }
+      .item2 {
+        position: relative;
+        top: 149.5px;
+        left: 413.5px;
+      }
+      .item3 {
+        position: relative;
+        top: 199.5px;
+        left: 327.5px;
+      }
+      .item4 {
+        position: relative;
+        top: 249px;
+        left: 241px;
+      }
+      .item5 {
+        position: relative;
+        top: 298px;
+        left: 155px;
+      }
+      .item:hover {
+        transform: translateY(-20px);
+      }
+      .item:hover .shadow {
+        background-color: rgba(155, 155, 155, 0.25);
+        box-shadow: 0 0 30px 15px rgba(8, 8, 8, 0.09);
+        transform: rotate(210deg) scaleY(0.864) translateY(20px);
+      }
+      .item:hover .top {
+        color: white;
+        background-color: #f80f62;
+      }
+
+      .item:hover .left {
+        background-color: #f7085c;
+      }
+      .item:hover .right {
+        background-color: #df0752;
+      }
+    </style>
+  </head>
+  <body>
+    <head>
+      <link
+        rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
+        crossorigin="anonymous"
+      />
+      <title>Isometric Menu</title>
+    </head>
+    <div class="container">
+      <div class="menu">
+        <div class="item item1">
+          <div class="shadow"></div>
+          <div class="left"></div>
+          <div class="right"></div>
+          <div class="top">
+            <i class="fa fa-search" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <div class="item item2">
+          <div class="shadow"></div>
+          <div class="left"></div>
+          <div class="right"></div>
+          <div class="top">
+            <i class="fa fa-sign-in-alt" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <div class="item item3">
+          <div class="shadow"></div>
+          <div class="left"></div>
+          <div class="right"></div>
+          <div class="top">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <div class="item item4">
+          <div class="shadow"></div>
+          <div class="left"></div>
+          <div class="right"></div>
+          <div class="top">
+            <i class="fa fa-user" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <div class="item item5">
+          <div class="shadow"></div>
+          <div class="left"></div>
+          <div class="right"></div>
+          <div class="top">
+            <i class="fa fa-home" aria-hidden="true"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
