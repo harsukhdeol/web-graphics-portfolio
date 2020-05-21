@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CodePen - Spring Canvas</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Playfair+Display:700&display=swap");
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        z-index: -1;
+      }
+      .text-wrapper {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        text-align: center;
+        font-size: 6em;
+        color: #ffe232;
+        font-family: "Playfair Display", serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="text-wrapper">
+      <h1>Spring</h1>
+    </div>
+
+    <canvas></canvas>
+
+    <script>
+      const canvas = document.querySelector("canvas");
+
+      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+
+      let ctx = canvas.getContext("2d");
+      var mouse = {
+        x: 0,
+        y: 0,
+      };
+      var maxRad = 40;
+      var minRad = 5;
+
+      var color = ["#FF99B9", "#A8E848", "#FFE232", "#96F1F2", "#FFAB5C"];
+      window.addEventListener("mousemove", function (e) {
+        mouse.x = e.x;
+        mouse.y = e.y;
+      });
+
+      window.addEventListener("resize", function () {
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        init();
+      });
+      function Circle(x, y, dx, dy, rad) {
+        this.x = x;
+        this.y = y;
+        this.dx = dx;
+        this.dy = dy;
+        this.rad = rad;
+        this.color = color[Math.floor(Math.random() * 5)];
+        this.minRad = rad;
+        this.draw = function () {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.rad, 0, Math.PI * 2, false);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+        };
+
+        this.update = function () {
+          if (this.x + this.rad > innerWidth || this.x - this.rad < 0) {
+            this.dx *= -1;
+          }
+          this.y + this.rad > innerHeight || this.y - this.rad < 0
+            ? (this.dy *= -1)
+            : (this.dy *= 1);
+          this.y += this.dy;
+          this.x += this.dx;
+
+          if (
+            Math.abs(mouse.x - this.x) < 50 &&
+            Math.abs(mouse.y - this.y) < 50 &&
+            this.rad < maxRad
+          ) {
+            this.rad += 1;
+          } else if (this.rad > this.minRad) {
+            this.rad--;
+          }
+          this.draw();
+        };
+      }
+
+      var circleArr = [];
+
+      function init() {
+        circleArr = [];
+        for (var i = 0; i < 300; i++) {
+          var x = Math.random() * (innerWidth - rad * 2) + rad;
+          var y = Math.random() * (innerHeight - rad * 2) + rad;
+          var rad = Math.random() * 3 + 1;
+
+          var dx = (Math.random() - 0.5) * 5;
+          var dy = (Math.random() - 0.5) * 5;
+
+          circleArr.push(new Circle(x, y, dx, dy, rad));
+        }
+      }
+      function animate() {
+        requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+        for (var i = 0; i < circleArr.length; i++) {
+          circleArr[i].update();
+        }
+      }
+      init();
+      animate();
+    </script>
+  </body>
+</html>
