@@ -1,9 +1,11 @@
 import three from "./imgs/three/three.js";
-console.log(three);
+import css from "./imgs/css/css.js";
 
 const threeDOM = document.getElementById("#three");
-renderItems(three,threeDOM)
-console.log(threeDOM);
+renderItems(three, threeDOM);
+
+const cssDOM = document.getElementById("#css");
+renderItems(css, cssDOM);
 
 function renderItems(arr, dom) {
   let content = document.createElement("div");
