@@ -36,6 +36,17 @@
       font-weight: 700;
       color: #ebd2ff;
     }
+
+    @media (max-width: 768px) {
+      .content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 500px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light sticky-top bg-white">
