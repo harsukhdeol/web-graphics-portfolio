@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Drop It</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Playfair+Display:700&display=swap");
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      h1 {
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        opacity: 0;
+        position: absolute;
+        top: 10%;
+        text-align: center;
+        width: 100vw;
+        font-size: 5em;
+        font-weight: bold;
+        font-family: "Century Gothic", sans-serif;
+      }
+      #after {
+        color: rgb(212, 34, 34);
+      }
+      .visible {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas></canvas>
+    <h1 class="visible">Drop It</h1>
+    <h1 id="after">Like Its Hot 🔥</h1>
+  </body>
+  <script href="src\js\canvas.js"></script>
+</html>

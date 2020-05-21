@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    
+<div id="container">
+    <div id = "room">
+    <div class= "right" > </div>
+        
+        <div class= "left" > </div>
+        <div class= "bottom" > <div></div>
+            <div id="rug"></div>    </div>
+        
+        <svg  id= "floor-l" height= "300" width= "300">
+            <polygon points= " 0,0 20,0 20,280 300,280 300,300 0,300"/>
+        </svg>
+        <svg  id= "floor-r" height= "300" width= "300">
+            <polygon points= " 0,0 20,0 20,280 300,280 300,300 0,300"/>
+        </svg>
+        <svg  id= "top" height= "300" width= "300">
+            <polygon points= " 0,0 20,0 20,280 300,280 300,300 0,300"/>
+        </svg>
+        
+     
+        <div class="window">
+            <div class="clouds">
+                  <div> <div class="cloud"></div></div> 
+                   <div>  <div class="cloud"></div></div> 
+                </div>
+        </div>
+              <div class="shutter">
+                    <div id="curtain"></div>
+                    <div id="shutter-front"></div>
+                    <div id="shutter-top"></div>
+                    <div id="shutter-side"></div>
+                    
+                </div>
+
+                <div class="table">
+                   
+                  <svg class="leg" height= "30" width= "5">
+                    <polygon points = "0,0 5,0 5,20 2.5,30 0,20"/>
+                  </svg>
+                  <svg class="leg" height= "30" width= "5">
+                     <polygon points = "0,0 5,0 5,20 2.5,30 0,20"/>
+                  </svg>
+                 <svg class="leg" height= "30" width= "5">
+                    <polygon points = "0,0 5,0 5,20 2.5,30 0,20"/>
+                    </svg>
+                    <div id="table-top"></div>
+                    <div id="table-front"></div>
+                    <div id="table-side"></div>
+                </div>
+        <div class= "sofa">
+                <div class="pillow"></div>
+                <div class="pillow"></div>
+            <div id="back"></div>
+            
+             <div id = "sofa-arm"></div>
+            <svg id= "sofa-side" height= "100" width="70">
+                <polygon points = "0,100 70,100 70,0 50,0 50,50 0,50"/>
+            </svg>
+                                
+            <div id = "sofa-top"></div>
+        </div>
+        <div class="phone">
+            <div id="phone-screen"></div>
+            <div id="phone-right"></div>
+            <div id="phone-left"></div>
+            <div id="halo"></div>
+        </div>
+       <div class ="tv">
+        <div id ="screen"></div>
+        <div id="tv-top"></div>
+        <div id="tv-side"></div>
+        <div id="glow"></div>
+    </div>
+    </div>
+    </div>
+    <script>
+      let curtain =   document.getElementById("curtain");
+     
+      let screen = document.getElementById("screen");
+      let glow = document.getElementById("glow");
+     let overlay = document.getElementById("overlay");
+        let sofa = document.querySelector(".sofa");
+    let bottom = document.querySelector(".bottom");
+        let left = document.querySelector(".left");
+        let right = document.querySelector(".right");
+        let shutter = document.querySelector(".shutter");
+        let table = document.querySelector(".table");
+        let wi = document.querySelector(".window");
+
+    
+        let phone = document.getElementById("phone-screen");
+      let halo = document.getElementById("halo");
+
+     curtain.addEventListener("click", function(){
+      this.classList.toggle('open');
+      });
+      halo.addEventListener("click", function(){
+        halo.classList.toggle('on');
+        phone.classList.toggle('on');
+      });
+
+      function strobe(e){
+        e.classList.toggle("strobe");
+      }
+      glow.addEventListener("click", function(){
+          glow.classList.toggle("on");
+          screen.classList.toggle("on");
+          phone.classList.toggle("light");
+          strobe(left);
+          strobe(right);
+          strobe(wi);
+          
+          [...shutter.children].forEach( strobe);
+          [...table.children].forEach( strobe);
+          [...sofa.children].forEach( strobe);
+         [...bottom.children].forEach(e =>{
+            e.classList.toggle("bgstrobe");
+         });
+        });
+      
+    </script>
+</body>
+</html>

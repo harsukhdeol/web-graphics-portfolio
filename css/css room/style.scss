@@ -1,0 +1,540 @@
+$colors: (
+	bottom: 	hsl(40, 16%, 96%),
+	left: hsl(50, 4%, 68%),
+	right:	hsl(42, 10%, 80%) ,
+	floor: hsl(50, 57%, 83%),
+	rightWall: 	hsl(170, 15%, 95%), 
+	leftWall: 	hsl(193, 33%, 92%), 
+    sofa: hsl(221, 38%, 24%), 
+    shutter:  hsl(39, 41%, 87%), 
+    table: hsl(31, 40%, 24%)
+);
+@keyframes light{
+0%{
+	background-color:hsl(313, 95%, 64%);
+}
+25%{
+	background-color:hsl(278, 95%, 64%);
+
+}
+50%{
+	background-color:hsl(187, 95%, 64%);
+
+}
+75%{
+	background-color:hsl(123, 95%, 64%);
+}
+100%{
+	background-color:hsl(54, 95%, 64%);
+}
+}
+
+@keyframes roomLight{
+	0%{
+		background-color:hsl(313, 55%, 26%);
+	}
+	25%{
+		background-color:hsl(278, 55%, 26%);
+	
+	}
+	50%{
+		background-color:hsl(187, 55%, 26%);
+	
+	}
+	75%{
+		background-color:hsl(123, 55%, 26%);
+	}
+	100%{
+		background-color:hsl(54, 55%, 26%);
+	}
+}
+@keyframes glowLight{
+	0%{
+		background: linear-gradient(130deg, hsl(313, 95%, 64%)0%, rgba(255, 255, 255, 0) 45%);
+	}
+	25%{
+		background: linear-gradient(130deg, hsl(278, 95%, 64%) 0%, rgba(255, 255, 255, 0) 45%);
+	}
+	50%{
+		background: linear-gradient(130deg, hsl(187, 95%, 64%) 0%, rgba(255, 255, 255, 0) 45%);
+	}
+	75%{
+		background: linear-gradient(130deg, hsl(123, 95%, 64%) 0%, rgba(255, 255, 255, 0) 45%);
+	}
+	100%{
+		background: linear-gradient(130deg, hsl(54, 95%, 64%) 0%, rgba(255, 255, 255, 0) 45%);
+	}
+}
+@mixin color ($key) {
+	background-color: map-get($colors, $key);
+}
+
+$left: rotateX(30deg) rotateY(-45deg);
+$right: rotateX(30deg) rotateY(45deg);
+$bottom: rotateX(60deg) rotateZ(45deg);
+
+@keyframes move{
+    from {  top: 0px;
+        left: -50px }
+    to   { top: 40px; left: 200px; }
+  }
+
+@keyframes scroll{
+    from{
+        height: 30px;
+    }
+    
+    to{
+        height: 110px;
+    }
+} 
+*{
+	transition: background 1s ease-in-out, animation 1s ease-in-out;
+
+
+}
+html,
+body {
+	background-color: #f2f2f2;
+}
+#container {
+	top: 50px;
+	left: 100px;
+	width: 700px;
+	height: 700px;
+	position: fixed;
+	background-color: #ddd;
+}
+#room {
+	width: 500px;
+	height: 500px;
+	position: absolute;
+	margin: 10% 10%;
+
+}
+
+div {
+	position: absolute;
+}
+.bottom {
+	width: 300px;
+	height: 300px;
+	transform: $bottom;
+	top: 215px;
+	left: 100px;
+	box-shadow: 50px 50px 30px 0px rgba(0, 0, 0, 0.64);
+	@include color(floor);
+	
+	.bgstrobe{
+		
+	width: 300px;
+	height: 300px;
+	transition: animation 5s ease-in-out;
+ animation: roomLight 10s linear infinite alternate;
+	mix-blend-mode: multiply;
+	}
+}
+#rug{
+	top: 20px;
+	left: 30px;
+	width: 100px;
+	height: 200px;
+	background:
+radial-gradient(circle at 100% 50%, transparent 20%, rgba(255,255,255,.3) 21%, rgba(255,255,255,.3) 34%, transparent 35%, transparent),
+radial-gradient(circle at 0% 50%, transparent 20%, rgba(255,255,255,.3) 21%, rgba(255,255,255,.3) 34%, transparent 35%, transparent) 0 -50px;
+background-color: rgb(141, 151, 158);
+background-size:6px 8px;
+border: 10px solid darken(rgb(97, 120, 138),15%);
+border-radius: 3%;
+}
+svg {
+	position: absolute;
+}
+
+#floor-l {
+	left: 206px;
+	top: 140px;
+	fill: map-get($colors, left);
+	transform: $left scaleX(-1);
+}
+
+#floor-r {
+	fill: map-get($colors, right);
+	transform: $right;
+	top: 140px;
+	left: -6px;
+}
+#top {
+	transform: $bottom rotateZ(90deg);
+	fill: map-get($colors, bottom);
+	left: 101px;
+	top: -43px;
+}
+.right {
+	width: 300px;
+	height: 300px;
+	top: 35px;
+	left: 206px;
+	@include color(leftWall);
+	transform: rotateX(30deg) rotateY(45deg);
+}
+
+.left {
+	width: 300px;
+	height: 300px;
+	@include color(rightWall);
+	transform: rotateX(30deg) rotateY(-45deg);
+	top: 35px;
+	left: -6px;
+}
+
+.tv > *{
+	position: absolute;
+}
+.tv{
+	top: 130px;
+	left: 90px;
+}
+	#screen {
+		width: 130px;
+		height: 80px;
+		background: #444444;;
+		 border: 5px solid black;
+		 box-shadow: -2px 5px 10px -2px rgb(54, 54, 54);
+		transform: $left;
+		transition: background-color 1s ease-in-out;
+		&.on{
+			animation: light 10s linear infinite alternate;
+	}
+	}
+	#tv-top{
+		width: 140px;
+		height: 5px;
+		left: -3px;
+		top: 3px;
+		background: black;
+		border-top: 1px solid lightgray;
+		transform: $bottom rotateZ(90deg);
+	}
+#tv-side{
+	width: 5px;
+	height: 90px;
+	background: black;
+	transform: $right;
+	border-top: 1px solid gray;
+	border-right: 1px solid gray;
+	top: 25px;
+	left: 15px;
+}
+#glow{
+	transition: animation 1s ease-in-out, animation 1s ease-in-out;
+
+	opacity: 0;
+	width: 200px;
+	height: 400px;
+	top: -42px;
+	left: 24px;
+	clip-path: polygon(46% 7%, 100% 14%,30% 56%, 0 36%, 0% 19%);
+		&.on{
+		animation: glowLight 10s linear infinite alternate;
+		opacity: 1;
+	}
+	&:hover{
+		cursor: pointer;
+	}
+}
+.sofa>*{
+	position: absolute;
+}
+.sofa{
+	top: 300px;
+	left: 230px;
+}
+#back{
+	width: 180px;
+	height: 100px;
+	@include color(sofa);
+	transform: $left;
+	
+	box-shadow:  inset -10px -10px 18px -19px rgba(0,0,0,0.75);
+	border-radius: 3%;
+}
+.pillow{
+	width: 90px;
+	height: 60px;
+    @include color (rightWall);
+    border-radius: 20%;
+    transform: $left;
+	box-shadow: inset -7px 11px 18px -19px rgba(0,0,0,0.75);
+    
+    &:first-of-type{
+      
+        top: 3px;
+        left: -12px;
+    }
+    &:nth-child(2){
+        top: -30px;
+		left: 54px;
+	}
+}
+
+#sofa-top{
+	width: 175px;
+	height: 20px;
+	top: -10px;
+	left: -10px;
+	@include color(sofa);
+	transform: $bottom rotateZ(90deg);
+	border-right: 5px solid lighten(map-get($colors, sofa),15%);
+	border-top: 5px solid lighten(map-get($colors, sofa),15%);
+}
+#sofa-arm{
+	width: 20px;
+	height: 60px;
+	@include color(sofa);
+	transform: $bottom rotateZ(90deg);
+	top: 32px;
+	left: -10px;
+border-right:	5px solid lighten(map-get($colors, sofa),15%);
+box-shadow:  inset -10px -10px 18px -19px rgba(0,0,0,0.75);
+
+}
+#sofa-side{
+	box-shadow:  inset -10px -10px 18px -19px rgba(0,0,0,0.75);
+
+	top: 19px;
+	left:-38px;
+	transform: $right;
+	fill: map-get($colors, sofa);
+	border-right: 5px solid lighten(map-get($colors, sofa),15%);
+}
+.window{
+    transform: $right;
+    width: 100px;
+    height: 140px;
+    border: 5px solid white;
+    background: linear-gradient(0deg, rgba(222,254,249,1) 0%, rgba(96,191,229,1) 100%);
+    box-shadow: 1px 1px 5px -3px,inset 14px 16px 18px -19px rgba(0,0,0,0.75);
+    top: 110px;
+    left: 300px;
+	overflow: hidden;
+
+	
+	
+}
+.clouds >*{
+	animation: move 10s linear infinite none running;
+	
+}
+.clouds{
+	& div{
+  &:first-child{
+	transform: scale(0.6); 
+	top: 30px;
+    left: 90px;
+  }
+  &:last-child{
+	transform: scaleX(1.2);
+    left: -50px;
+      opacity: 0.8;
+  }
+}
+}
+
+.cloud {
+	background: #fff;
+	background: linear-gradient(top,  #fff 5%,#f1f1f1 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff', endColorstr='#f1f1f1',GradientType=0 );
+	
+	border-radius: 100px;
+	box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+
+	height: 20px;
+	position: relative;
+    width: 50px;
+
+    
+}
+
+.cloud:after, .cloud:before {
+    background: #fff;
+	content: '';
+	position: absolute;
+	z-indeX: -1;
+}
+
+.cloud:after {
+	border-radius: 10px;
+
+	height: 10px;
+	left:33px;
+	top: -8px;
+	width: 10px;
+}
+
+.cloud:before {
+	border-radius: 20px;
+
+	width: 25px;
+	height: 25px;
+	right: 15px;
+	top: -15px;
+}
+
+.shutter{
+    top: 100px;
+    left: 305px;
+
+}
+
+#shutter-front{
+    width: 100px;
+    height: 20px;
+    transform:$right;
+    background: darken(map-get($colors , shutter ), 10%);
+     top: 10px;
+	left: -7px;
+	box-shadow:3px 2px 10px -2px rgb(59, 59, 59);
+
+}
+#shutter-top{
+    width: 100px;
+    height: 20px;
+    transform:$bottom;
+    @include color(shutter);
+}
+#shutter-side{
+    width: 20px;
+    height: 20px;
+    transform: $left;
+    background: darken(map-get($colors , shutter ), 20%);
+    top: 25px;
+    left: 75px;
+}
+#curtain{
+    width: 100px;
+    height: 130px;
+    top: 15px;
+    left: -1px;
+    transform: $right;
+    @include color(shutter);
+    box-shadow: 2px 2px 8px -1px rgba(0, 0, 0, 0.64);
+	transition: height 1s cubic-bezier(0.47, -0.02, 0.49, 1.72);
+
+	&:hover{
+		cursor: pointer;
+	}
+	&.open{
+		height: 30px;
+	}
+}
+.table >*{
+    position: absolute;
+    @include color(table);
+}
+.table{
+    top: 250px;
+    left: 190px;
+}
+#table-top{
+    width: 60px;
+    height: 120px;
+    transform: $bottom;
+    background: lighten(map-get($colors , table ), 15%);
+    top: -12px;
+	left: 0px;
+	border-radius: 3%;
+}
+#table-front{
+    height: 5px;
+    width: 115px;
+   transform: $left;
+   top: 58px;
+   left:-7px;
+
+
+}
+#table-side{
+    height: 5px;
+    width: 65px;
+    transform: $right;
+    top: 69px;
+    left: -42px;
+}
+.leg{
+    fill: map-get($colors , table );
+    background-color: none;
+   
+    &:first-of-type{/*front*/
+        top: 75px;
+        left: 10px;
+    }
+    &:nth-of-type(2){/* back */
+        top: 45px;
+        left: 75px;
+    }
+    &:last-of-type{ /* side */
+        top: 60px;
+        left: -20px;
+    }
+}
+.phone{
+	width: 50px;
+	height: 50px;
+top:286px;
+left: 200px;
+	
+}
+#phone-screen{
+	width: 30px;
+	height: 15px;
+	background: #757474;
+	transform: $bottom ;
+	border: 3px solid black;
+	border-radius: 10%;
+	left: -1px;
+	top:1px;
+	
+	&.on{
+		background-color: rgb(159, 225, 252);
+	}
+	&.light{
+		animation: roomLight 10s linear infinite alternate;
+	}
+}
+#phone-left{
+	width:21px;
+	height: 2px;
+	transform: $left;
+	background: #000000;
+	top: 17px;
+	left: 18.5px;
+}
+#phone-right{
+	width: 34px;
+	height: 2px;
+	transform: $right;
+	background: #000000;
+	top: 15px;
+	left: -7px;
+	border-radius: 20%;
+}
+#halo{
+
+	top: -28px;
+	left: 2px;
+	width: 50px;
+	height: 50px;
+	clip-path: polygon(81% 0, 59% 85%, 40% 94%, 0 73%, -25% 0);
+	&.on{
+		background: linear-gradient(30deg, rgb(202, 240, 255) 0%, rgba(255, 255, 255, 0) 55%);
+	}
+	&:hover{
+		cursor: pointer;
+	}
+}
+.strobe{
+	transition: animation 5s ease-in-out;
+ animation: roomLight 10s linear infinite alternate;
+		mix-blend-mode: multiply;
+	}
