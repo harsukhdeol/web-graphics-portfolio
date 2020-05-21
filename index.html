@@ -11,36 +11,81 @@
     />
     <title>Web Graphics Projects</title>
   </head>
+  <style>
+    img {
+      object-fit: cover;
+      width: 100%;
+      max-height: 100%;
+    }
+    .content {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+  </style>
   <body>
-    <nav></nav>
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top bg-white">
+      <a class="navbar-brand" href="#top"
+        ><img height="60" width="60" src="assets/imgs/logo.png"
+      /></a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div
+        class="collapse navbar-collapse flex-row-reverse"
+        id="navbarSupportedContent"
+      >
+        <ul class="navbar-nav m-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#three"
+              >Three.js<span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#css">CSS/SVG</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#blender">Blender</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#ui">UI/UX</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#graphic">Graphic</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
     <h1>Web Graphics Projects</h1>
     <div class="container">
       <div id="#three">
         <h2>WebGL & Three.js</h2>
-
-
-        </div>
       </div>
+
       <div id="#css">
         <h2>CSS & SVG</h2>
-        </div>
       </div>
       <div id="#blender">
         <h2>3D with Blender</h2>
-        </div>
       </div>
       <div id="#motion">
         <h2>Motion Design & Animation</h2>
-        </div>
       </div>
       <div id="#ui">
         <h2>UX/UI Design</h2>
-        </div>
       </div>
       <div id="#graphic">
         <h2>Graphic Design and Illustration</h2>
-        </div>
       </div>
     </div>
     <footer>

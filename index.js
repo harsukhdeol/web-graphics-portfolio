@@ -2,9 +2,9 @@ import three from "./imgs/three/three.js";
 console.log(three);
 
 const threeDOM = document.getElementById("#three");
-const items = renderItems(three, threeDOM);
-threeDOM.appendChild(items);
+renderItems(three,threeDOM)
 console.log(threeDOM);
+
 function renderItems(arr, dom) {
   let content = document.createElement("div");
   content.classList.add("content");
@@ -16,5 +16,5 @@ function renderItems(arr, dom) {
     link.appendChild(img);
     content.appendChild(link);
   });
-  return content;
+  dom.appendChild(content);
 }
