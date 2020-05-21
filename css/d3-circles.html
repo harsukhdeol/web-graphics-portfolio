@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CodePen - d3 Circles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
+    />
+    <style>
+      #chart {
+        width: 500px;
+        height: 500px;
+      }
+
+      body {
+        display: -webkit-box;
+        display: flex;
+        -webkit-box-pack: center;
+        justify-content: center;
+        height: 100vh;
+        -webkit-box-align: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- partial:index.partial.html -->
+    <div id="chart"></div>
+    <!-- partial -->
+    <script src="https://codepen.io/grayghostvisuals/pen/a08e0d79c150ff5030f9b6afaa137749.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-interpolate/1.3.0/d3-interpolate.min.js"></script>
+    <script>
+      var margin = {
+        top: 10,
+        right: 10,
+        bottom: 10,
+        left: 10,
+      };
+
+      var width = (height = 500);
+      var steps = 24;
+      let maxRad = 4;
+
+      for (let circles = 0; circles < 5; circles++) {
+        var xScale = d3
+          .scaleLinear()
+          .domain([-1.25, 1.25])
+          .range([-width / 2, width / 2]);
+
+        //SVG container
+        var svg = d3
+          .select("#chart")
+          .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .style("position", "fixed")
+          .append("g")
+          .attr(
+            "transform",
+            "translate(" +
+              (margin.left + width / 2) +
+              "," +
+              (margin.top + height / 2) +
+              ")"
+          );
+
+        //Create scale
+
+        //Create a wrapper for the circles that has the Gooey effect applied to it
+
+        var circleWrapper = svg.append("g");
+        //Create the circles that will move out and in the center circle
+
+        var flyCircleData = [];
+
+        rad = 1.5;
+
+        let radius = [];
+        for (var i = 0; i < steps; i++) {
+          if (i < steps / 4 || (i < (3 * steps) / 4 && i >= steps / 2)) {
+            rad += 0.5;
+          } else {
+            rad -= 0.5;
+          }
+          radius.push(rad * maxRad);
+
+          flyCircleData.push({
+            fixedAngle: (i / steps) * (2 * Math.PI),
+            randomAngle: (i / steps) * (2 * Math.PI),
+            speed: 12000,
+
+            r: radius[i],
+            rotate: -circles * 30 + 100,
+          });
+        }
+
+        //Set up the circles
+        var flyCircles = circleWrapper
+          .selectAll(".flyCircle")
+          .data(flyCircleData)
+          .enter()
+          .append("circle")
+          .attr("class", "flyCircle")
+          .style("fill", "#ff8000")
+          .attr("transform", function (d) {
+            return "rotate(" + d.rotate + ")";
+          })
+
+          .attr("cy", 0)
+          .attr("cx", 0)
+          .attr("r", 0)
+          .transition()
+          .duration(2000)
+          .attr("cy", function (d) {
+            return xScale(Math.sin(d.fixedAngle));
+          })
+          .attr("cx", function (d) {
+            return xScale(Math.cos(d.fixedAngle));
+          })
+          .attr("r", function (d) {
+            return d.r;
+          });
+        if (circles % 2) {
+          flyCircles = flyCircles
+            .attrTween("transform", function (d) {
+              return d3.interpolateString(
+                "rotate(" + d.rotate + ")",
+                "rotate(" + (d.rotate + 360) + ")"
+              );
+            })
+            .on("end", goCW);
+        } else {
+          flyCircles = flyCircles
+            .attrTween("transform", function (d) {
+              return d3.interpolateString(
+                "rotate(" + (d.rotate + 360) + ")",
+                "rotate(" + d.rotate + ")"
+              );
+            })
+            .on("end", goCCW);
+        }
+
+        maxRad -= 0.5;
+
+        space = 2 * Math.max(parseInt([...radius])) + 2;
+        width = height -= 5 * space;
+        margin.top = margin.left += space * 2.5;
+
+        steps--;
+      }
+      //Continuously moves the circles with different speeds
+
+      function goCCW(d) {
+        d3.select(this)
+          .transition()
+          .duration(function (d) {
+            return d.speed;
+          })
+          //.ease("linear")
+          .attrTween("transform", function (d) {
+            return d3.interpolateString(
+              "rotate(" + (d.rotate + 360) + ")",
+              "rotate(" + d.rotate + ")"
+            );
+          })
+
+          .on("end", goCCW);
+      }
+
+      function goCW(d) {
+        d3.select(this)
+          .transition()
+          .duration(function (d) {
+            return d.speed;
+          })
+          //.ease("linear")
+          .attrTween("transform", function (d) {
+            return d3.interpolateString(
+              "rotate(" + d.rotate + ")",
+              "rotate(" + (d.rotate + 360) + ")"
+            );
+          })
+          .on("end", goCW);
+      }
+    </script>
+  </body>
+</html>
