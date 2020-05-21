@@ -1,10 +1,10 @@
 import three from "./imgs/three/three.js";
 import css from "./imgs/css/css.js";
 
-const threeDOM = document.getElementById("#three");
+const threeDOM = document.getElementById("three");
 renderItems(three, threeDOM);
 
-const cssDOM = document.getElementById("#css");
+const cssDOM = document.getElementById("css");
 renderItems(css, cssDOM);
 
 function renderItems(arr, dom) {
