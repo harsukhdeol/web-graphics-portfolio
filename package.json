@@ -16,5 +16,6 @@
     "url": "https://github.com/harsukhdeol/three.js_projects/issues"
   },
   "homepage": "https://github.com/harsukhdeol/three.js_projects#readme",
-  "description": ""
+  "description": "",
+  "type": "module"
 }
