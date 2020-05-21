@@ -156,15 +156,35 @@
 html,
 body {
   background-color: #f2f2f2;
+  overflow: hidden;
+}
+
+.wrapper,
+.wrapper-text {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100vw;
+  height: calc(100vh - 8rem);
+  position: relative;
+}
+
+.wrapper-text {
+  height: 4rem;
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 0.5rem;
+  color: rgba(0, 0, 0, 0.2);
 }
 
 #container {
-  top: 50px;
-  left: 100px;
   width: 700px;
-  height: 700px;
-  position: fixed;
-  background-color: #ddd;
+  height: 650px;
 }
 
 #room {
@@ -172,6 +192,8 @@ body {
   height: 500px;
   position: absolute;
   margin: 10% 10%;
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
 }
 
 div {
@@ -460,11 +482,12 @@ svg {
   width: 50px;
 }
 
-.cloud:after, .cloud:before {
+.cloud:after,
+.cloud:before {
   background: #fff;
-  content: '';
+  content: "";
   position: absolute;
-  z-indeX: -1;
+  z-index: -1;
 }
 
 .cloud:after {
