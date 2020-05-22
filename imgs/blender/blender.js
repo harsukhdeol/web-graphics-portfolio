@@ -4,7 +4,7 @@ let vids = [];
 
 for (let i = 0; i < count; i++) {
   vids.push({
-    img: `imgs/blender/img${i}.mp4`,
+    img: `imgs/blender/${i}.jpg`,
     vid: `imgs/blender/${i}.mp4`,
   });
 }

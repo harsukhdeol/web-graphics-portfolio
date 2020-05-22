@@ -4,7 +4,7 @@ let vids = [];
 
 for (let i = 0; i < count; i++) {
   vids.push({
-    img: `imgs/motion/img${i}.mp4`,
+    img: `imgs/motion/${i}.jpg`,
     vid: `imgs/motion/${i}.mp4`,
   });
 }
