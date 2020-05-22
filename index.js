@@ -1,6 +1,7 @@
 import three from "./imgs/three/three.js";
 import css from "./imgs/css/css.js";
 import graphic from "./imgs/graphic/graphic.js";
+import ui from "./imgs/ui/ui.js";
 
 const threeDOM = document.getElementById("three");
 renderItems(three, threeDOM, "code");
@@ -10,6 +11,9 @@ renderItems(css, cssDOM, "code");
 
 const graphicDOM = document.getElementById("graphic");
 renderItems(graphic, graphicDOM, "img");
+
+const uiDOM = document.getElementById("ui");
+renderItems(ui, uiDOM, "img");
 
 function renderItems(arr, dom, type) {
   let content = document.createElement("div");
