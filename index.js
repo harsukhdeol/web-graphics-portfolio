@@ -2,9 +2,9 @@ import three from "./imgs/three/three.js";
 import css from "./imgs/css/css.js";
 import graphic from "./imgs/graphic/graphic.js";
 import ui from "./imgs/ui/ui.js";
+import motion from "./imgs/motion/motion.js";
 
 import blender from "./imgs/blender/blender.js";
-console.log(blender[0].img);
 
 const threeDOM = document.getElementById("three");
 renderItems(three, threeDOM, "code");
@@ -20,6 +20,9 @@ renderItems(ui, uiDOM, "img");
 
 const blenderDOM = document.getElementById("blender");
 renderItems(blender, blenderDOM, "vid");
+
+const motionDOM = document.getElementById("motion");
+renderItems(motion, motionDOM, "vid");
 
 function renderItems(arr, dom, type) {
   let content = document.createElement("div");
