@@ -2,4 +2,6 @@ npm install http-server -g
 
 http-server . -p 8000
 
-img script for f in *.mp4; do ffmpeg -i "$f" -ss 00:00:03 -vframes 1 -s 480x320 "${f%.mp4}.jpg"; done
+img script
+
+for f in *.mp4; do ffmpeg -i "$f" -ss 00:00:01 -vframes 1 -s 400x400 "${f%.mp4}.jpg"; done
