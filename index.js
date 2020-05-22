@@ -3,6 +3,9 @@ import css from "./imgs/css/css.js";
 import graphic from "./imgs/graphic/graphic.js";
 import ui from "./imgs/ui/ui.js";
 
+import blender from "./imgs/blender/blender.js";
+console.log(blender[0].img);
+
 const threeDOM = document.getElementById("three");
 renderItems(three, threeDOM, "code");
 
@@ -14,6 +17,9 @@ renderItems(graphic, graphicDOM, "img");
 
 const uiDOM = document.getElementById("ui");
 renderItems(ui, uiDOM, "img");
+
+const blenderDOM = document.getElementById("blender");
+renderItems(blender, blenderDOM, "vid");
 
 function renderItems(arr, dom, type) {
   let content = document.createElement("div");
