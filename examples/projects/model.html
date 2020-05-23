@@ -9,6 +9,7 @@
     body {
       margin: 0;
       padding: 0;
+      overflow: hidden;
     }
 
     .ac {
@@ -23,10 +24,6 @@
         width: 100vw !important;
         margin: 0;
       }
-      /*  div,
-      li {
-        font-size: 2rem;
-      } */
     }
   </style>
   <body></body>
@@ -72,10 +69,9 @@
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0xa0a0a0);
 
-      scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
+      /* const axis = new THREE.AxesHelper();
+      scene.add(axis); */
 
-      const axis = new THREE.AxesHelper();
-      scene.add(axis);
       camera = new THREE.PerspectiveCamera(
         45,
         window.innerWidth / window.innerHeight,
@@ -303,16 +299,13 @@
 
         if (startAction) {
           // Crossfade with warping
-
           startAction.crossFadeTo(endAction, duration, true);
         } else {
           // Fade in
-
           endAction.fadeIn(duration);
         }
       } else {
         // Fade out
-
         startAction.fadeOut(duration);
       }
     }
