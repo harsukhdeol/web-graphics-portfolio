@@ -174,11 +174,11 @@
 
     function animate() {
       requestAnimationFrame(animate);
-      for (let i = 0; i < numAnimations; i++) {
-        /*     const action = allActions[i];
+      for (let i = 0; i < baseActions.length; i++) {
+        const action = allActions[i];
         const clip = action.getClip();
         const settings = baseActions[clip.name];
-        settings.weight = action.getEffectiveWeight(); */
+        settings.weight = action.getEffectiveWeight();
       }
 
       let deltaT = clock.getDelta();
