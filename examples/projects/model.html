@@ -44,7 +44,7 @@
     var panelSettings, numAnimations;
 
     var lightColor = 0xffffff;
-    var meshColor;
+    var darkerMat, lighterMat;
     init();
 
     function init() {
@@ -60,7 +60,8 @@
       document.body.appendChild(renderer.domElement);
 
       scene = new THREE.Scene();
-      // scene.background = new THREE.Color(0xa0a0a0);
+      scene.background = new THREE.Color(0xa0a0a0);
+
       scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
       const axis = new THREE.AxesHelper();
       scene.add(axis);
@@ -104,7 +105,8 @@
       loader.load("../models/gltf/Xbot.glb", function (gltf) {
         model = gltf.scene;
         scene.add(model);
-
+        darkerMat = model.children[0].children[1].material;
+        lighterMat = model.children[0].children[2].material;
         model.traverse((obj) => {
           if (obj.isMesh) obj.castShadow = true;
         });
@@ -135,7 +137,6 @@
         }
         createPanel();
         animate();
-        console.log(allActions);
       });
 
       controls = new OrbitControls(camera, renderer.domElement);
@@ -152,7 +153,6 @@
 
     function activateAction(action) {
       const clip = action.getClip();
-      console.log(clip.name);
       const settings = baseActions[clip.name];
       setWeight(action, settings.weight);
 
@@ -169,6 +169,19 @@
       const panel = new GUI({ width: 310 });
       const animations = panel.addFolder("Animation");
       const style = panel.addFolder("Styling");
+
+      let data = {
+        innerColor: darkerMat.color.getHex(),
+        outerColor: lighterMat.color.getHex(),
+      };
+      console.log(darkerMat);
+      style
+        .addColor(data, "innerColor")
+        .onChange(handleColorChange(darkerMat.color));
+      style
+        .addColor(data, "outerColor")
+        .onChange(handleColorChange(lighterMat.color));
+
       panelSettings = {
         "modify time scale": 1.0,
       };
@@ -184,6 +197,7 @@
 
           prepareCrossFade(currentAction, action, 0.35);
         };
+        console.log(panelSettings);
         crossFadeControls.push(animations.add(panelSettings, name));
       }
       crossFadeControls.forEach(function (control) {
@@ -208,6 +222,15 @@
       });
     }
 
+    function handleColorChange(color) {
+      return function (value) {
+        if (typeof value === "string") {
+          value = value.replace("#", "0x");
+        }
+
+        color.setHex(value);
+      };
+    }
     function modifyTimeScale(speed) {
       mixer.timeScale = speed;
     }
