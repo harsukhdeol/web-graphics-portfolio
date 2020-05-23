@@ -34,4 +34,9 @@ export default [
     img: "imgs/three/transparent.png",
     code: "examples/projects/transparent.html",
   },
+  {
+    name: "Model",
+    img: "imgs/three/model.png",
+    code: "examples/projects/model.html",
+  },
 ];
