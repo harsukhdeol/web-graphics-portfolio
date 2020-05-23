@@ -23,7 +23,7 @@
     var renderer, scene, camera;
     var model, skeleton, mixer, clock;
     var controls;
-
+    var ground;
     var crossFadeControls = [];
 
     let currentBaseAction = "idle";
@@ -34,16 +34,10 @@
       run: { weight: 0 },
     };
 
-    const additiveActions = {
-      sneak_pose: { weight: 0 },
-      sad_pose: { weight: 0 },
-      agree: { weight: 0 },
-      headShake: { weight: 0 },
-    };
-
     var panelSettings, numAnimations;
 
-    var lightColor = 0xffffff;
+    var hemiLight;
+
     var darkerMat, lighterMat;
     init();
 
@@ -61,7 +55,7 @@
 
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0xa0a0a0);
-
+      console.log(scene.background);
       scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
       const axis = new THREE.AxesHelper();
       scene.add(axis);
@@ -71,10 +65,10 @@
         1,
         100
       );
-      camera.position.set(-5, 5, 5);
+      camera.position.set(-1, 2, 8);
 
       //lights
-      let hemiLight = new THREE.HemisphereLight(lightColor, 0x444444);
+      hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
       hemiLight.position.set(0, 20, 0);
       scene.add(hemiLight);
 
@@ -91,7 +85,7 @@
 
       //ground
 
-      const ground = new THREE.Mesh(
+      ground = new THREE.Mesh(
         new THREE.PlaneBufferGeometry(100, 100),
         new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false })
       );
@@ -169,10 +163,13 @@
       const panel = new GUI({ width: 310 });
       const animations = panel.addFolder("Animation");
       const style = panel.addFolder("Styling");
-
+      console.log(ground);
       let data = {
         innerColor: darkerMat.color.getHex(),
         outerColor: lighterMat.color.getHex(),
+        lightColor: hemiLight.color.getHex(),
+        sceneColor: scene.background.getHex(),
+        groundColor: ground.material.color.getHex(),
       };
       console.log(darkerMat);
       style
@@ -181,6 +178,15 @@
       style
         .addColor(data, "outerColor")
         .onChange(handleColorChange(lighterMat.color));
+      style
+        .addColor(data, "lightColor")
+        .onChange(handleColorChange(hemiLight.color));
+      style
+        .addColor(data, "sceneColor")
+        .onChange(handleColorChange(scene.background));
+      style
+        .addColor(data, "sceneColor")
+        .onChange(handleColorChange(ground.material.color));
 
       panelSettings = {
         "modify time scale": 1.0,
