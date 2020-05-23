@@ -6,11 +6,27 @@
     <title>Play with Models</title>
   </head>
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
     .ac {
       user-select: none;
     }
     .control-inactive {
       color: gray;
+    }
+    @media (max-width: 500px) {
+      div.dg.main.a,
+      .close-button {
+        width: 100vw !important;
+        margin: 0;
+      }
+      /*  div,
+      li {
+        font-size: 2rem;
+      } */
     }
   </style>
   <body></body>
@@ -55,8 +71,9 @@
 
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0xa0a0a0);
-      console.log(scene.background);
+
       scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
+
       const axis = new THREE.AxesHelper();
       scene.add(axis);
       camera = new THREE.PerspectiveCamera(
@@ -65,7 +82,7 @@
         1,
         100
       );
-      camera.position.set(-1, 2, 8);
+      camera.position.set(-1, 2, 3);
 
       //lights
       hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
@@ -134,13 +151,9 @@
       });
 
       controls = new OrbitControls(camera, renderer.domElement);
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.05;
-
-      controls.screenSpacePanning = false;
-      (controls.minDistance = 1), (controls.maxDistance = 200);
-      controls.enablePanning = false;
+      controls.enablePan = false;
       controls.target.set(0, 1, 0);
+      controls.update();
 
       window.addEventListener("resize", onResize, false);
     }
@@ -162,8 +175,7 @@
     function createPanel() {
       const panel = new GUI({ width: 310 });
       const animations = panel.addFolder("Animation");
-      const style = panel.addFolder("Styling");
-      console.log(ground);
+      const style = panel.addFolder("Colors");
       let data = {
         innerColor: darkerMat.color.getHex(),
         outerColor: lighterMat.color.getHex(),
@@ -171,7 +183,6 @@
         sceneColor: scene.background.getHex(),
         groundColor: ground.material.color.getHex(),
       };
-      console.log(darkerMat);
       style
         .addColor(data, "innerColor")
         .onChange(handleColorChange(darkerMat.color));
@@ -185,7 +196,7 @@
         .addColor(data, "sceneColor")
         .onChange(handleColorChange(scene.background));
       style
-        .addColor(data, "sceneColor")
+        .addColor(data, "groundColor")
         .onChange(handleColorChange(ground.material.color));
 
       panelSettings = {
@@ -203,7 +214,6 @@
 
           prepareCrossFade(currentAction, action, 0.35);
         };
-        console.log(panelSettings);
         crossFadeControls.push(animations.add(panelSettings, name));
       }
       crossFadeControls.forEach(function (control) {
