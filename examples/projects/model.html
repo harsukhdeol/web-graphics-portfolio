@@ -26,7 +26,7 @@
 
     var crossFadeControls = [];
 
-    let currentAction = "idle";
+    let currentBaseAction = "idle";
     const allActions = [];
     const baseActions = {
       idle: { weight: 1 },
@@ -154,17 +154,130 @@
       const clip = action.getClip();
       console.log(clip.name);
       const settings = baseActions[clip.name];
-      //set weight
-      action.enabled = true;
-      action.setEffectiveTimeScale(1);
-      action.setEffectiveWeight(settings.weight);
+      setWeight(action, settings.weight);
 
       action.play();
     }
 
-    function createPanel() {
-      console.log("panel");
+    function setWeight(action, weight) {
+      action.enabled = true;
+      action.setEffectiveTimeScale(1);
+      action.setEffectiveWeight(weight);
     }
+
+    function createPanel() {
+      const panel = new GUI({ width: 310 });
+      const animations = panel.addFolder("Animation");
+      const style = panel.addFolder("Styling");
+      panelSettings = {
+        "modify time scale": 1.0,
+      };
+
+      const baseNames = ["None", ...Object.keys(baseActions)];
+      for (let i = 0; i < baseNames.length; i++) {
+        const name = baseNames[i];
+        const settings = baseActions[name];
+        panelSettings[name] = function () {
+          const currentSettings = baseActions[currentBaseAction];
+          const currentAction = currentSettings ? currentSettings.action : null;
+          const action = settings ? settings.action : null;
+
+          prepareCrossFade(currentAction, action, 0.35);
+        };
+        crossFadeControls.push(animations.add(panelSettings, name));
+      }
+      crossFadeControls.forEach(function (control) {
+        control.classList1 =
+          control.domElement.parentElement.parentElement.classList;
+        control.classList2 =
+          control.domElement.previousElementSibling.classList;
+
+        control.setInactive = function () {
+          control.classList2.add("control-inactive");
+        };
+
+        control.setActive = function () {
+          control.classList2.remove("control-inactive");
+        };
+
+        const settings = baseActions[control.property];
+
+        if (!settings || !settings.weight) {
+          control.setInactive();
+        }
+      });
+    }
+
+    function modifyTimeScale(speed) {
+      mixer.timeScale = speed;
+    }
+
+    function prepareCrossFade(startAction, endAction, duration) {
+      // If the current action is 'idle', execute the crossfade immediately;
+      // else wait until the current action has finished its current loop
+
+      if (currentBaseAction === "idle" || !startAction || !endAction) {
+        executeCrossFade(startAction, endAction, duration);
+      } else {
+        synchronizeCrossFade(startAction, endAction, duration);
+      }
+
+      // Update control colors
+
+      if (endAction) {
+        const clip = endAction.getClip();
+        currentBaseAction = clip.name;
+      } else {
+        currentBaseAction = "None";
+      }
+
+      crossFadeControls.forEach(function (control) {
+        const name = control.property;
+
+        if (name === currentBaseAction) {
+          control.setActive();
+        } else {
+          control.setInactive();
+        }
+      });
+    }
+
+    function synchronizeCrossFade(startAction, endAction, duration) {
+      mixer.addEventListener("loop", onLoopFinished);
+
+      function onLoopFinished(event) {
+        if (event.action === startAction) {
+          mixer.removeEventListener("loop", onLoopFinished);
+
+          executeCrossFade(startAction, endAction, duration);
+        }
+      }
+    }
+
+    function executeCrossFade(startAction, endAction, duration) {
+      // Not only the start action, but also the end action must get a weight of 1 before fading
+      // (concerning the start action this is already guaranteed in this place)
+
+      if (endAction) {
+        setWeight(endAction, 1);
+        endAction.time = 0;
+
+        if (startAction) {
+          // Crossfade with warping
+
+          startAction.crossFadeTo(endAction, duration, true);
+        } else {
+          // Fade in
+
+          endAction.fadeIn(duration);
+        }
+      } else {
+        // Fade out
+
+        startAction.fadeOut(duration);
+      }
+    }
+
     function onResize() {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
