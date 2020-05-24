@@ -11,63 +11,64 @@
       crossorigin="anonymous"
     />
     <title>Web Graphics Projects</title>
-  </head>
-  <style>
-    .container img {
-      object-fit: cover;
-      width: 100%;
-      max-height: 100%;
-    }
-    .container a {
-      text-decoration: none;
-      text-transform: uppercase;
-      color: white;
-    }
-    .container img:hover {
-      transform: scale(1.02);
-      box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease-in;
-    }
-    .container img::after {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1000;
-      background-color: rgba(0, 0, 0, 0.2);
-      content: "View";
-    }
-    .content {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      border-top: 0.5px solid gray;
-      padding: 1rem 0;
-      margin: 1rem 0;
-    }
-    .container > * {
-      padding: 6rem 0 1rem 0;
-    }
-    h1 {
-      text-align: center;
-      font-size: 4rem;
-      text-transform: uppercase;
-      font-weight: 700;
-      color: #ebd2ff;
-    }
 
-    @media (max-width: 768px) {
-      .content {
-        grid-template-columns: repeat(2, 1fr);
+    <style>
+      .container img {
+        object-fit: cover;
+        width: 100%;
+        max-height: 100%;
       }
-    }
-    @media (max-width: 500px) {
-      .content {
-        grid-template-columns: 1fr;
+      .container a {
+        text-decoration: none;
+        text-transform: uppercase;
+        color: white;
       }
-    }
-  </style>
+      .container img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in;
+      }
+      .container img::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        background-color: rgba(0, 0, 0, 0.2);
+        content: "View";
+      }
+      .content {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        border-top: 0.5px solid gray;
+        padding: 1rem 0;
+        margin: 1rem 0;
+      }
+      .container > * {
+        padding: 6rem 0 1rem 0;
+      }
+      h1 {
+        text-align: center;
+        font-size: 4rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: #ebd2ff;
+      }
+
+      @media (max-width: 768px) {
+        .content {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 500px) {
+        .content {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light sticky-top bg-white">
       <a class="navbar-brand" href="https://harsukhdeol.github.io/portfolio/"
