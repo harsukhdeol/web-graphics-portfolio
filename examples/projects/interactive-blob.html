@@ -29,9 +29,48 @@
         intersectedObj;
 
       var grayMat, colorMat;
-      var speed, distort;
-      var sphere;
+      var s1;
       var composer;
+
+      class Blob {
+        constructor(speed = 0.0005, x = 0, y = 0, z = 0) {
+          this.speed = speed;
+          this.x = x;
+          this.y = y;
+          this.z = z;
+          this.sphere = new THREE.Mesh(
+            new THREE.SphereGeometry(1, 128, 128),
+            grayMat
+          );
+        }
+
+        draw() {
+          this.sphere.position.set(this.x, this.y, this.z);
+          scene.add(this.sphere);
+        }
+        update() {
+          var distort = 0.5; //how much farther away from the regular sphere geometry you want the points to go - max =size
+          var time = performance.now() * this.speed;
+          //console.log(time)
+
+          //go through vertices here and reposition them
+
+          // change 'k' value for more spikes
+          var k = 0.5;
+
+          for (var i = 0; i < this.sphere.geometry.vertices.length; i++) {
+            var p = this.sphere.geometry.vertices[i];
+            p.normalize().multiplyScalar(
+              0.5 +
+                distort * noise.perlin3(p.x * k, p.y * k + time, p.z * k + time)
+            );
+          }
+          this.sphere.geometry.computeVertexNormals();
+          this.sphere.geometry.normalsNeedUpdate = true;
+          this.sphere.geometry.verticesNeedUpdate = true;
+        }
+      }
+
       init();
       animate();
 
@@ -74,12 +113,10 @@
         light.castShadow = true; // default false
         scene.add(light);
 
-        var sphere_geometry = new THREE.SphereGeometry(1, 128, 128);
         colorMat = new THREE.MeshNormalMaterial();
         grayMat = new THREE.MeshStandardMaterial({ color: 0xbbbbbb });
-        sphere = new THREE.Mesh(sphere_geometry, grayMat);
-
-        scene.add(sphere);
+        s1 = new Blob();
+        s1.draw();
         document.addEventListener("resize", onResize, false);
         document.addEventListener("mousemove", highlight, false);
       }
@@ -90,38 +127,16 @@
         mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
       }
 
-      function update() {
-        speed = 0.0005;
-        distort = 0.5; //how much farther away from the regular sphere geometry you want the points to go - max =size
-        var time = performance.now() * speed;
-        //console.log(time)
-
-        //go through vertices here and reposition them
-
-        // change 'k' value for more spikes
-        var k = 0.5;
-
-        for (var i = 0; i < sphere.geometry.vertices.length; i++) {
-          var p = sphere.geometry.vertices[i];
-          p.normalize().multiplyScalar(
-            0.5 +
-              distort * noise.perlin3(p.x * k, p.y * k + time, p.z * k + time)
-          );
-        }
-        sphere.geometry.computeVertexNormals();
-        sphere.geometry.normalsNeedUpdate = true;
-        sphere.geometry.verticesNeedUpdate = true;
-      }
       function onResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
 
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
-      var intersects;
+
       function render() {
         raycaster.setFromCamera(mouse, camera);
-        intersects = raycaster.intersectObjects(scene.children);
+        var intersects = raycaster.intersectObjects(scene.children);
 
         if (intersects.length > 0) {
           if (intersectedObj != intersects[0].object) {
@@ -146,7 +161,7 @@
         //sphere.rotation.x += 0.01;
         //sphere.rotation.y += 0.01;
 
-        update();
+        s1.update();
         render();
         renderer.render(scene, camera);
         composer.render();
