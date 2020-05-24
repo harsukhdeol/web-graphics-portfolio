@@ -91,21 +91,21 @@
       }
 
       function update() {
-        speed = 0.0015;
-        distort = 0.3;
+        speed = 0.0005;
+        distort = 0.5; //how much farther away from the regular sphere geometry you want the points to go - max =size
         var time = performance.now() * speed;
         //console.log(time)
 
         //go through vertices here and reposition them
 
         // change 'k' value for more spikes
-        var k = 1.2;
+        var k = 0.5;
 
         for (var i = 0; i < sphere.geometry.vertices.length; i++) {
           var p = sphere.geometry.vertices[i];
           p.normalize().multiplyScalar(
             0.5 +
-              distort * noise.perlin3(p.x * k + time, p.y * k, p.z * k + time)
+              distort * noise.perlin3(p.x * k, p.y * k + time, p.z * k + time)
           );
         }
         sphere.geometry.computeVertexNormals();
