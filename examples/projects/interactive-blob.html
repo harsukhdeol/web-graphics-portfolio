@@ -9,22 +9,48 @@
         margin: 0;
         overflow: hidden;
       }
+      svg {
+        position: absolute;
+        top: 50vh;
+        /* text-align: center;
+        -webkit-text-stroke: 2px white;
+        width: 100vw;
+        opacity: 0.4;
+        text-transform: uppercase;
+        font-size: 8rem;
+        color: black;
+        font-weight: 900; */
+        font-family: "Century Gothic", Helvetica, sans-serif;
+      }
     </style>
   </head>
   <body>
     <canvas id="canvas"></canvas>
+    <svg viewbox="0 0 10 2">
+      <text
+        x="5"
+        y="1"
+        text-anchor="middle"
+        font-size="1"
+        fill="none"
+        stroke-width=".015"
+        stroke="#fff"
+        font-family="sans-serif"
+      >
+        HOVER
+      </text>
+    </svg>
     <script src="https://fariskassim.com/stage/rebel9/teaf/blob/v4/js/perlin.js"></script>
     <script type="module">
       import * as THREE from "../../build/three.module.js";
 
-      import { OrbitControls } from "../jsm/controls/OrbitControls.js";
       import { EffectComposer } from "../jsm/postprocessing/EffectComposer.js";
       import { RenderPass } from "../jsm/postprocessing/RenderPass.js";
       import { GlitchPass } from "../jsm/postprocessing/GlitchPass.js";
       import { ShaderPass } from "../jsm/postprocessing/ShaderPass.js";
       import { LuminosityShader } from "../jsm/shaders/LuminosityShader.js";
 
-      var renderer, camera, scene, raycaster, controls;
+      var renderer, camera, scene, raycaster;
       var mouse = new THREE.Vector2(),
         intersectedObj;
 
@@ -33,11 +59,11 @@
       var composer;
 
       class Blob {
-        constructor(spacing = 5, pos = 0) {
-          this.speed = 0.0005;
-          this.x = Math.random() * spacing - pos;
-          this.y = Math.random() * spacing - pos;
-          this.z = Math.random() * spacing - pos;
+        constructor(x, y, z) {
+          this.speed = 0.0002;
+          this.x = x;
+          this.y = y;
+          this.z = z;
           this.sphere = new THREE.Mesh(
             new THREE.SphereGeometry(1, 128, 128),
             grayMat
@@ -49,19 +75,18 @@
           scene.add(this.sphere);
         }
         update() {
-          var distort = 0.5; //how much farther away from the regular sphere geometry you want the points to go - max =size
+          var distort = 0.7; //how much farther away from the regular sphere geometry you want the points to go - max =size
           var time = performance.now() * this.speed;
-          //console.log(time)
 
           //go through vertices here and reposition them
 
           // change 'k' value for more spikes
-          var k = 0.5;
-          noise.seed(this.x);
+          var k = 0.7;
+          noise.seed(this.y + this.x);
           for (var i = 0; i < this.sphere.geometry.vertices.length; i++) {
             var p = this.sphere.geometry.vertices[i];
             p.normalize().multiplyScalar(
-              0.5 +
+              distort +
                 distort * noise.perlin3(p.x * k, p.y * k + time, p.z * k + time)
             );
           }
@@ -74,15 +99,10 @@
           var intersects = raycaster.intersectObjects(scene.children);
 
           if (intersects.length > 0) {
-            console.log(intersects[0].object.id);
-
             if (intersects[0].object == this.sphere) {
-              //save current emissive value to revert when mouse leaves
-              //  intersectedObj.currentHex = intersectedObj.material.emissive.getHex();
               this.sphere.material = colorMat;
-              this.speed = 0.008;
+              this.speed = 0.002;
             } else {
-              //  intersectedObj.material.emissive.setHex(intersectedObj.currentHex);
               this.sphere.material = grayMat;
               this.speed = 0.0005;
             }
@@ -102,20 +122,19 @@
           antialias: true,
         });
         renderer.setPixelRatio(window.devicePixelRatio);
-        // set size of canvas within window //
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
         scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xffffff);
+        //  scene.background = new THREE.Color(0xffffff);
         camera = new THREE.PerspectiveCamera(
           45,
           window.innerWidth / window.innerHeight,
           0.1,
           1000
         );
-        camera.position.z = 15;
+        camera.position.set(2, -1, 15);
 
         composer = new EffectComposer(renderer);
         var renderPass = new RenderPass(scene, camera);
@@ -136,25 +155,33 @@
         light.castShadow = true; // default false
         scene.add(light);
 
-        var ambientLight = new THREE.AmbientLight(0xffffff);
-        //scene.add(ambientLight);
-
         //create materials
         colorMat = new THREE.MeshNormalMaterial();
         grayMat = new THREE.MeshStandardMaterial({ color: 0xbbbbbb });
 
         //create blobs array
-        const numBlobs = 3;
-        for (let i = 0; i < numBlobs; i++) {
-          let blob = new Blob();
-          console.log(blob);
-          blob.draw();
-          blobs.push(blob);
-        }
-        controls = new OrbitControls(camera, renderer.domElement);
+        const xBlobs = 3,
+          yBlobs = 3,
+          zBlobs = 2;
+        const spacing = 3,
+          variance = 2.5;
+        for (let i = 0; i < xBlobs; i++) {
+          for (let j = 0; j < yBlobs; j++) {
+            for (let k = 0; k < yBlobs; k++) {
+              let x = i * spacing + Math.random() * variance - xBlobs;
+              let y = j * spacing + Math.random() * variance - yBlobs - 1;
+              let z = k * spacing + Math.random() * spacing;
+              let blob = new Blob(x, y, z);
 
-        document.addEventListener("resize", onResize, false);
-        document.addEventListener("mousemove", highlight, false);
+              blob.draw();
+
+              blobs.push(blob);
+            }
+          }
+        }
+
+        window.addEventListener("resize", onResize, false);
+        window.addEventListener("mousemove", highlight, false);
       }
 
       function highlight(e) {
@@ -170,37 +197,11 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
 
-      function render() {
-        raycaster.setFromCamera(mouse, camera);
-        var intersects = raycaster.intersectObjects(scene.children);
-
-        if (intersects.length > 0) {
-          if (intersectedObj != intersects[0].object) {
-            //if move to new object, set the emissive back
-            if (intersectedObj) intersectedObj.material = grayMat;
-
-            intersectedObj = intersects[0].object;
-            console.log(intersectedObj);
-
-            //save current emissive value to revert when mouse leaves
-            //  intersectedObj.currentHex = intersectedObj.material.emissive.getHex();
-            intersectedObj.material = colorMat;
-          }
-        } else {
-          if (intersectedObj)
-            //  intersectedObj.material.emissive.setHex(intersectedObj.currentHex);
-            intersectedObj.material = grayMat;
-          intersectedObj = null;
-        }
-      }
       function animate() {
-        //sphere.rotation.x += 0.01;
-        //sphere.rotation.y += 0.01;
         for (let i = 0; i < blobs.length; i++) {
           blobs[i].update();
           blobs[i].render();
         }
-        // render();
         renderer.render(scene, camera);
         composer.render();
         requestAnimationFrame(animate);
