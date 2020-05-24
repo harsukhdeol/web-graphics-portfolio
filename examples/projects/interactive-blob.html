@@ -18,11 +18,21 @@
       import * as THREE from "../../build/three.module.js";
 
       import { OrbitControls } from "../jsm/controls/OrbitControls.js";
+      import { EffectComposer } from "../jsm/postprocessing/EffectComposer.js";
+      import { RenderPass } from "../jsm/postprocessing/RenderPass.js";
+      import { GlitchPass } from "../jsm/postprocessing/GlitchPass.js";
+      import { ShaderPass } from "../jsm/postprocessing/ShaderPass.js";
+      import { LuminosityShader } from "../jsm/shaders/LuminosityShader.js";
 
-      var renderer, camera, scene;
+      var renderer, camera, scene, raycaster;
+      var mouse = new THREE.Vector2(),
+        intersectedObj;
+
+      var radius = 100,
+        theta = 0;
 
       var sphere;
-
+      var composer;
       init();
       animate();
 
@@ -46,18 +56,41 @@
         );
         camera.position.z = 5;
 
+        composer = new EffectComposer(renderer);
+        var renderPass = new RenderPass(scene, camera);
+        composer.addPass(renderPass);
+
+        /*    var glitchPass = new GlitchPass();
+             composer.addPass(glitchPass);
+      */
+        var luminosityPass = new ShaderPass(LuminosityShader);
+        composer.addPass(luminosityPass);
+        console.log(luminosityPass);
+
+        //add raycaster
+        raycaster = new THREE.Raycaster();
+
         var light = new THREE.PointLight(0xffffff, 1, 100);
         light.position.set(10, 0, 10);
         light.castShadow = true; // default false
         scene.add(light);
 
         var sphere_geometry = new THREE.SphereGeometry(1, 128, 128);
-        var material = new THREE.MeshNormalMaterial();
-
+        //var material = new THREE.MeshNormalMaterial();
+        var material = new THREE.MeshStandardMaterial({ color: 0x2194ce });
         sphere = new THREE.Mesh(sphere_geometry, material);
 
         scene.add(sphere);
+        document.addEventListener("resize", onResize, false);
+        document.addEventListener("mousemove", highlight, false);
       }
+
+      function highlight(e) {
+        e.preventDefault();
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
+      }
+
       function update() {
         var time = performance.now() * 0.0015;
         //console.log(time)
@@ -76,12 +109,49 @@
         sphere.geometry.normalsNeedUpdate = true;
         sphere.geometry.verticesNeedUpdate = true;
       }
+      function onResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      var intersects;
+      function render() {
+        theta += 0.1;
+
+        raycaster.setFromCamera(mouse, camera);
+        intersects = raycaster.intersectObjects(scene.children);
+
+        if (intersects.length > 0) {
+          if (intersectedObj != intersects[0].object) {
+            //if move to new object, set the emissive back
+            if (intersectedObj)
+              intersectedObj.material.emissive.setHex(
+                intersectedObj.currentHex
+              );
+
+            intersectedObj = intersects[0].object;
+            console.log(intersectedObj);
+
+            //save current emissive value to revert when mouse leaves
+            intersectedObj.currentHex = intersectedObj.material.emissive.getHex();
+            intersectedObj.material.emissive.setHex(0xffffff);
+          }
+        } else {
+          if (intersectedObj)
+            intersectedObj.material.emissive.setHex(intersectedObj.currentHex);
+
+          intersectedObj = null;
+        }
+      }
       function animate() {
         //sphere.rotation.x += 0.01;
         //sphere.rotation.y += 0.01;
 
         update();
+        render();
         renderer.render(scene, camera);
+        composer.render();
         requestAnimationFrame(animate);
       }
     </script>
