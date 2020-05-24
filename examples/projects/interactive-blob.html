@@ -28,9 +28,8 @@
       var mouse = new THREE.Vector2(),
         intersectedObj;
 
-      var radius = 100,
-        theta = 0;
-
+      var grayMat, colorMat;
+      var speed, distort;
       var sphere;
       var composer;
       init();
@@ -63,9 +62,9 @@
         /*    var glitchPass = new GlitchPass();
              composer.addPass(glitchPass);
       */
-        var luminosityPass = new ShaderPass(LuminosityShader);
+        /*   var luminosityPass = new ShaderPass(LuminosityShader);
         composer.addPass(luminosityPass);
-        console.log(luminosityPass);
+        console.log(luminosityPass); */
 
         //add raycaster
         raycaster = new THREE.Raycaster();
@@ -76,9 +75,9 @@
         scene.add(light);
 
         var sphere_geometry = new THREE.SphereGeometry(1, 128, 128);
-        //var material = new THREE.MeshNormalMaterial();
-        var material = new THREE.MeshStandardMaterial({ color: 0x2194ce });
-        sphere = new THREE.Mesh(sphere_geometry, material);
+        colorMat = new THREE.MeshNormalMaterial();
+        grayMat = new THREE.MeshStandardMaterial({ color: 0xbbbbbb });
+        sphere = new THREE.Mesh(sphere_geometry, grayMat);
 
         scene.add(sphere);
         document.addEventListener("resize", onResize, false);
@@ -92,17 +91,21 @@
       }
 
       function update() {
-        var time = performance.now() * 0.0015;
+        speed = 0.0015;
+        distort = 0.3;
+        var time = performance.now() * speed;
         //console.log(time)
 
         //go through vertices here and reposition them
 
         // change 'k' value for more spikes
         var k = 1.2;
+
         for (var i = 0; i < sphere.geometry.vertices.length; i++) {
           var p = sphere.geometry.vertices[i];
           p.normalize().multiplyScalar(
-            1 + 0.3 * noise.perlin3(p.x * k + time, p.y * k, p.z * k + time)
+            0.5 +
+              distort * noise.perlin3(p.x * k + time, p.y * k, p.z * k + time)
           );
         }
         sphere.geometry.computeVertexNormals();
@@ -117,30 +120,25 @@
       }
       var intersects;
       function render() {
-        theta += 0.1;
-
         raycaster.setFromCamera(mouse, camera);
         intersects = raycaster.intersectObjects(scene.children);
 
         if (intersects.length > 0) {
           if (intersectedObj != intersects[0].object) {
             //if move to new object, set the emissive back
-            if (intersectedObj)
-              intersectedObj.material.emissive.setHex(
-                intersectedObj.currentHex
-              );
+            if (intersectedObj) intersectedObj.material = grayMat;
 
             intersectedObj = intersects[0].object;
             console.log(intersectedObj);
 
             //save current emissive value to revert when mouse leaves
-            intersectedObj.currentHex = intersectedObj.material.emissive.getHex();
-            intersectedObj.material.emissive.setHex(0xffffff);
+            //  intersectedObj.currentHex = intersectedObj.material.emissive.getHex();
+            intersectedObj.material = colorMat;
           }
         } else {
           if (intersectedObj)
-            intersectedObj.material.emissive.setHex(intersectedObj.currentHex);
-
+            //  intersectedObj.material.emissive.setHex(intersectedObj.currentHex);
+            intersectedObj.material = grayMat;
           intersectedObj = null;
         }
       }
