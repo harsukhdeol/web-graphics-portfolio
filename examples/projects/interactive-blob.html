@@ -13,22 +13,15 @@
         display: block;width: 100vw;
         position: absolute;
         top: 50vh;
-        /* text-align: center;
-        -webkit-text-stroke: 2px white;
-        
-        opacity: 0.4;
-        text-transform: uppercase;
-        font-size: 8rem;
-        color: black;
-        font-weight: 900; */
+      
         font-family: "Century Gothic", Helvetica, sans-serif;
       }
     </style>
   </head>
   <body>
     <canvas id="canvas"></canvas>
-    <svg viewbox="0 0 10 2">
-        <text x="5" y="1" text-anchor="middle" font-size="1" fill="none" stroke-width=".01" stroke="#fff">Hover</text>
+    <svg viewbox="0 0 10 1.5">
+        <text x="5" y="1" text-anchor="middle"   font-weight=" 900" text-transform="uppercase" font-size="1" fill="none" stroke-width=".01" stroke="#fff">Hover</text>
       </svg>
     </svg>
     <script src="https://fariskassim.com/stage/rebel9/teaf/blob/v4/js/perlin.js"></script>
@@ -39,7 +32,7 @@
       import { RenderPass } from "../jsm/postprocessing/RenderPass.js";
       import { GlitchPass } from "../jsm/postprocessing/GlitchPass.js";
       import { ShaderPass } from "../jsm/postprocessing/ShaderPass.js";
-      import { LuminosityShader } from "../jsm/shaders/LuminosityShader.js";
+      import {DigitalGlitch} from "../jsm/shaders/DigitalGlitch.js";
 
       var renderer, camera, scene, raycaster;
       var mouse = new THREE.Vector2(),
@@ -136,9 +129,9 @@
         /*    var glitchPass = new GlitchPass();
              composer.addPass(glitchPass);
       */
-        /*   var luminosityPass = new ShaderPass(LuminosityShader);
-        composer.addPass(luminosityPass);
-        console.log(luminosityPass); */
+          /*  var glitch = new ShaderPass(DigitalGlitch);
+        composer.addPass(glitch); */
+    
 
         //add raycaster
         raycaster = new THREE.Raycaster();
@@ -150,7 +143,7 @@
 
         //create materials
         colorMat = new THREE.MeshNormalMaterial();
-        grayMat = new THREE.MeshStandardMaterial({ color: 0xbbbbbb });
+        grayMat = new THREE.MeshStandardMaterial({ color: 0x999999});
 
         //create blobs array
         const xBlobs = 3,
