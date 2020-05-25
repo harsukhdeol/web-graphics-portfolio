@@ -12,7 +12,7 @@
       svg {
         display: block;width: 100vw;
         position: absolute;
-        top: 50vh;
+        top: calc(50vh - 4rem);
       
         font-family: "Century Gothic", Helvetica, sans-serif;
       }
@@ -30,8 +30,9 @@
 
       import { EffectComposer } from "../jsm/postprocessing/EffectComposer.js";
       import { RenderPass } from "../jsm/postprocessing/RenderPass.js";
-      import { GlitchPass } from "../jsm/postprocessing/GlitchPass.js";
       import { ShaderPass } from "../jsm/postprocessing/ShaderPass.js";
+      import { BloomPass } from "../jsm/postprocessing/BloomPass.js";
+      import { FilmPass } from "../jsm/postprocessing/FilmPass.js";
       import {DigitalGlitch} from "../jsm/shaders/DigitalGlitch.js";
 
       var renderer, camera, scene, raycaster;
@@ -120,17 +121,8 @@
           0.1,
           1000
         );
-        camera.position.set(2, -1, 15);
+        camera.position.set(2, -1, 10);
 
-        composer = new EffectComposer(renderer);
-        var renderPass = new RenderPass(scene, camera);
-        composer.addPass(renderPass);
-
-        /*    var glitchPass = new GlitchPass();
-             composer.addPass(glitchPass);
-      */
-          /*  var glitch = new ShaderPass(DigitalGlitch);
-        composer.addPass(glitch); */
     
 
         //add raycaster
@@ -143,12 +135,12 @@
 
         //create materials
         colorMat = new THREE.MeshNormalMaterial();
-        grayMat = new THREE.MeshStandardMaterial({ color: 0x999999});
+        grayMat = new THREE.MeshStandardMaterial({ color: 0xaaaaaa});
 
         //create blobs array
         const xBlobs = 3,
-          yBlobs = 3,
-          zBlobs = 2;
+          yBlobs =2,
+          zBlobs = 1;
         const spacing = 3,
           variance = 2.5;
         for (let i = 0; i < xBlobs; i++) {
@@ -160,7 +152,7 @@
               let blob = new Blob(x, y, z);
 
               blob.draw();
-
+console.log(blob);
               blobs.push(blob);
             }
           }
@@ -168,6 +160,35 @@
 
         window.addEventListener("resize", onResize, false);
         window.addEventListener("mousemove", highlight, false);
+
+
+
+
+        //postprocessing
+        composer = new EffectComposer(renderer);
+        var renderPass = new RenderPass(scene, camera);
+        composer.addPass(renderPass);
+        const bloomPass = new BloomPass(
+    1.2,    // strength
+    45,   // kernel size
+    4,    // sigma ?
+    256,  // blur render target resolution
+);
+composer.addPass(bloomPass);
+
+const filmPass = new FilmPass(
+    0.15,   // noise intensity
+    0.025,  // scanline intensity
+    648,    // scanline count
+    false,  // grayscale
+);
+filmPass.renderToScreen = true;
+composer.addPass(filmPass);
+        /*    var glitchPass = new GlitchPass();
+             composer.addPass(glitchPass);
+      */
+          /*  var glitch = new ShaderPass(DigitalGlitch);
+        composer.addPass(glitch); */
       }
 
       function highlight(e) {
@@ -179,7 +200,7 @@
       function onResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
-
+        composer.setSize(canvas.width, canvas.height);
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
 
