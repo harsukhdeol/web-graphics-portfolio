@@ -39,4 +39,9 @@ export default [
     img: "imgs/three/model.png",
     code: "examples/projects/model.html",
   },
+  {
+    name: "Interactive Blob",
+    img: "imgs/three/interactive-blob.png",
+    code: "examples/projects/interactive-blob.html",
+  },
 ];
