@@ -1,4 +1,4 @@
-const count = 3;
+const count = 6;
 
 let vids = [];
 
