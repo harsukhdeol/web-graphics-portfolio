@@ -10,10 +10,26 @@
   <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
   <body style="margin: 0px; overflow: hidden;">
     <a-scene embedded arjs>
-      <!-- create your content here. just a box for now -->
-      <a-box position="0 0.5 0" material="opacity: 0.5;"></a-box>
+        <a-assets>
+            <a-asset-item id="poke" src="./assets/magnemite/scene.gltf""></a-asset-item>
+          </a-assets>
+          <!-- use your gltf model -->
+          <a-entity gltf-model="##poke"></a-entity>
+          <a-entity
+          position="0 -1 0"
+          scale="0.05 0.05 0.05"
+          gltf-model="./assets/magnemite/scene.gltf"
+          ></a-entity>
+  
+   <!-- 
+          <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+          <a-box position="-1 0.5 -3" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9"></a-box>
+          <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+          <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane> -->
       <!-- define a camera which will move according to the marker position -->
-      <a-marker-camera preset="hiro"></a-marker-camera>
+      <a-marker-camera preset="hiro">
+      
+      </a-marker-camera>
     </a-scene>
   </body>
 </html>
